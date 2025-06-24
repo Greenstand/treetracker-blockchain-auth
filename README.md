@@ -5,15 +5,6 @@ The **Backend Bridge** is a secure linking layer that connects a **Keycloak Iden
 ## Table of Contents
 - [Role & Purpose](#role--purpose)
 - [Architecture](#architecture)
-# Contents Update In Progress ....
-- [Key Components](#key-components)
-- [Tech Stack](#tech-stack)
-- [API Endpoints](#api-endpoints)
-- [Security Considerations](#security-considerations)
-- [Setup Instructions](#setup-instructions)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Role & Purpose
 
