@@ -34,7 +34,14 @@ The Backend Bridge facilitates seamless integration between Keycloak and Hyperle
 
 ```
 ---
+## 🚀 Key Features
 
+- 🔐 Authenticate users with Keycloak using JWT tokens
+- 🧾 Validate JWT tokens using Keycloak JWKS
+- 🧬 Register users with Hyperledger Fabric CA
+- 📜 Enroll and issue Fabric certificates for authenticated users
+- 💼 Securely store blockchain identities in a Fabric Wallet
+  
 ## 🧭 System Overview
 
 ```mermaid
