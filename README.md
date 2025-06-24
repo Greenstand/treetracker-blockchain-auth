@@ -5,6 +5,7 @@ The **Backend Bridge** is a secure linking layer that connects a **Keycloak Iden
 ## Table of Contents
 - [Role & Purpose](#role--purpose)
 - [Architecture](#architecture)
+- [System Overview](#system--overview)
 
 ## Role & Purpose
 
@@ -30,3 +31,32 @@ The Backend Bridge facilitates seamless integration between Keycloak and Hyperle
                          +---------+          +-------------+       +-------------+
                          | Keycloak|          | Fabric CA   |       | Fabric Wallet|
                          +---------+          +-------------+       +-------------+
+
+```
+---
+
+## 🧭 System Overview
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User
+    participant Frontend
+    participant Backend Bridge
+    participant Keycloak
+    participant Fabric Wallet
+    participant Fabric CA
+
+    User->>Frontend: Login via Keycloak
+    Frontend->>Keycloak: Redirect for authentication
+    Keycloak-->>Frontend: Returns JWT token
+    Frontend->>Backend Bridge: Sends JWT (Authorization: Bearer <token>)
+    Backend Bridge->>Keycloak: Verify JWT using JWKS
+    alt Identity not in Fabric Wallet
+        Backend Bridge->>Fabric CA: Register & Enroll user
+        Fabric CA-->>Backend Bridge: Returns signed cert
+        Backend Bridge->>Fabric Wallet: Store identity
+    end
+    Backend Bridge-->>Frontend: Success + Identity reference
+
+
