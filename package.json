@@ -1,0 +1,23 @@
+{
+  "name": "treetracker-blockchain-auth",
+  "version": "1.0.0",
+  "description": "The **Backend Bridge** is a secure linking layer that connects a **Keycloak Identity Provider** with the **Hyperledger Fabric blockchain identity system** (Fabric CA & Wallet). It authenticates users via **JWT tokens** from Keycloak, manages their registration and enrollment with **Fabric CA**, and securely stores identities in a **Fabric Wallet**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnjaliK-123/treetracker-blockchain-auth.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnjaliK-123/treetracker-blockchain-auth/issues"
+  },
+  "homepage": "https://github.com/AnjaliK-123/treetracker-blockchain-auth#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
