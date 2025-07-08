@@ -1,55 +1,49 @@
-const jwt = require('jsonwebtoken');
-const jwksClient = require('jwks-rsa');
-require('dotenv').config();
+const { config, validateToken } = require('../services/auth/keycloak.service');
 
-
-const client = jwksClient({
-    jwksUri: process.env.KEYCLOAK_JWKS_URI
-});
-
-function getKey(header, callback) {
-    client.getSigningKey(header.kid, (err, key) => {
-
-        if (err) {
-            return callback(err);
-        }
-
-        const signingKey = key.getPublicKey || key.rsaPublicKey;
-        callback(null, signingKey);
-    });
-}
-
-const verifyToken = (req, res, next) => {
+const extractToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-        res.status(401).json({ error: 'Token not provided' });
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        req.token = authHeader.split(' ')[1];
     }
-
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, getKey, (err, decodedToken) => {
-
-        if (err) {
-            return res.status(401).json({ error: 'Invalid token' });
-        }
-        //Attach user info to request
-        req.user = decodedToken;
-        next();
-    });
+    next();
 };
 
-const checkRole = (requiredRole) => {
-    
-    return (req, res, next) => {
-        if (!req.user) {
-            return res.status(401).json({ error: 'User not authenticated' });
+const validateJwt = async (req, res, next) => {
+    try {
+        const token = req.token;
+        if (!token) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'No token provided' 
+            });
         }
 
-        const userRoles = req.user.realm_access?.roles || [];
+        const decoded = await validateToken(token);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        console.error('Token validation error:', error.message);
+        return res.status(401).json({ 
+            success: false, 
+            message: 'Invalid or expired token' 
+        });
+    }
+};
 
-        if(!userRoles.includes(requiredRole)){
-            return res.status(403).json({ error: 'User not authorized' });
+const checkRole = (roles = []) => {
+    return (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'User not authenticated' 
+            });
+        }
+
+        if (roles.length && !roles.some(role => req.user.realm_access?.roles?.includes(role))) {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Insufficient permissions' 
+            });
         }
 
         next();
@@ -57,7 +51,7 @@ const checkRole = (requiredRole) => {
 };
 
 module.exports = {
-    getKey,
-    verifyToken,
+    extractToken,
+    validateJwt,
     checkRole
 };
