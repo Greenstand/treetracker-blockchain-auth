@@ -7,11 +7,11 @@ Base URL: `http://localhost:3000/api/auth`
 curl -X POST http://localhost:3000/api/auth/register \
  -H "Content-Type: application/json" \
  -d '{
-"username": "testuser2",
-"email": "test2@example.com",
-"password": "password123",
-"firstName": "Test",
-"lastName": "User"
+"username": "your-username",
+"email": "your-email@example.com",
+"password": "your-password",
+"firstName": "your-first-name",
+"lastName": "your-last-name"
 }'
 
 ## 2. Login
@@ -19,8 +19,8 @@ curl -X POST http://localhost:3000/api/auth/register \
 curl -X POST http://localhost:3000/api/auth/login \
  -H "Content-Type: application/json" \
  -d '{
-"username": "testuser2",
-"password": "password123"
+"username": "your-username",
+"password": "your-password"
 }'
 
 ## 3. Refresh Access Token
