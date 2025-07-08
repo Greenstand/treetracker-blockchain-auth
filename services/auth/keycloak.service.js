@@ -34,7 +34,9 @@ async function getAdminToken() {
         const body = new URLSearchParams();
         body.append('client_id', config.clientId);
         body.append('client_secret', config.clientSecret);
-        body.append('grant_type', 'client_credentials');
+        body.append('grant_type', 'password');
+        body.append('username', config.adminUsername);
+        body.append('password', config.adminPassword);
 
         const response = await axios.post(tokenUrl, body, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
