@@ -98,13 +98,6 @@ const refreshToken = async (req, res) => {
         body.append('grant_type', 'refresh_token');
         body.append('refresh_token', refreshToken);
 
-        console.log('Sending refresh token request to:', tokenUrl);
-        console.log('Request body:', {
-            client_id: config.clientId,
-            grant_type: 'refresh_token',
-            refresh_token: refreshToken.substring(0, 10) + '...'
-        });
-
         const response = await axios.post(tokenUrl, body, {
             headers: { 
                 'Content-Type': 'application/x-www-form-urlencoded',
