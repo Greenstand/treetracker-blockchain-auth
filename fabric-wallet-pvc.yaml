@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fabric-wallet-pvc
+  namespace: greenstand
+  labels:
+    app: fabric-auth-bridge
+    component: wallet
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      storage: fabric-wallet
+  volumeMode: Filesystem
