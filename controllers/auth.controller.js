@@ -1,4 +1,5 @@
 const { loginUser, registerUser, config } = require('../services/auth/keycloak.service');
+const { registerUser: registerFabricUser } = require('../services/fabric/wallet.service');
 const axios = require('axios');
 
 const register = async (req, res) => {
@@ -12,7 +13,7 @@ const register = async (req, res) => {
             });
         }
 
-        const result = await registerUser({
+        const keycloakUser = await registerUser({
             username,
             email,
             password,
@@ -20,7 +21,23 @@ const register = async (req, res) => {
             lastName
         });
 
-        res.status(201).json(result);
+        const fabricIdentity = {
+            userId: keycloakUser.id,
+            certificate: `-----BEGIN CERTIFICATE-----\nUser:${keycloakUser.id}\n-----END CERTIFICATE-----`,
+            privateKey: `-----BEGIN PRIVATE KEY-----\nPrivateKeyFor:${keycloakUser.id}\n-----END PRIVATE KEY-----`,
+            mspId: process.env.FABRIC_MSP_ID || 'Org1MSP'
+        };
+
+        const result = await registerFabricUser(fabricIdentity);
+
+
+
+        res.status(201).json({
+            success: true,
+            userId: keycloakUser.id,
+            message: 'User registered successfully'
+        });
+
 
     } catch (error) {
         console.error('Registration error:', error);
