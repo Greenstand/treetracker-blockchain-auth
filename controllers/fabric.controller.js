@@ -30,7 +30,7 @@ const register = async (req, res) => {
 
 const getIdentity = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userId } = req.params;
         const identity = await walletService.getIdentity(userId);
 
         if (!identity) {
@@ -51,7 +51,7 @@ const getIdentity = async (req, res) => {
 
 const checkUserExists = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userId } = req.params;
         const exists = await walletService.userExists(userId);
 
         res.status(200).json(exists);
@@ -63,8 +63,58 @@ const checkUserExists = async (req, res) => {
     }
 };
 
+const enrollAdmin = async (req, res) => {
+    try {
+        const { userId, secret, caUrl } = req.body;
+        const result = await walletService.enrollAdmin({ userId, secret, caUrl });
+        res.status(201).json(result);
+    } catch (error) {
+        console.error('Enroll admin error:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const registerUser = async (req, res) => {
+    try {
+        const { userId, secret, affiliation, role } = req.body;
+        const result = await walletService.registerAndEnrollUser({
+            userId,
+            secret,
+            caUrl: process.env.FABRIC_CA_URL,
+            affiliation,
+            role
+        });
+        res.status(201).json(result);
+    } catch (error) {
+        console.error('Register user error:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const revokeUser = async (req, res) => {
+    res.status(501).json({ error: 'Not implemented' });
+};
+
+const listIdentities = async (req, res) => {
+    res.status(501).json({ error: 'Not implemented' });
+};
+
+const exportIdentity = async (req, res) => {
+    res.status(501).json({ error: 'Not implemented' });
+};
+
+const healthCheck = async (req, res) => {
+    res.json({ status: 'UP' });
+};
+
 module.exports = {
     register,
     getIdentity,
-    checkUserExists
+    checkUserExists,
+    enrollAdmin,
+    registerUser,
+    revokeUser,
+    listIdentities,
+    exportIdentity,
+    healthCheck
 }
