@@ -4,9 +4,9 @@ const path = require('path');
 
 class WalletService{
     constructor() {
-        this.walletPath = process.env.FRABIC_WALLET_PATH || './wallet';
+        this.walletPath = process.env.FABRIC_WALLET_PATH;
+        this.mspId = process.env.FABRIC_MSP_ID;
         this.wallet = null;
-        this.initialized = false;
     }
 
     async initialize() {
