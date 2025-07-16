@@ -45,7 +45,7 @@ url: http://localhost:7054
 # Membership Service Provider (MSP) directory
 # This is useful when the client is used to enroll a peer or orderer, so
 # that the enrollment artifacts are stored in the format expected by MSP.
-mspdir: /tmp/msp
+mspdir: msp
 
 #############################################################################
 #    TLS section for secure socket connection
@@ -117,7 +117,7 @@ csr:
       O: Hyperledger
       OU: Fabric
   hosts:
-    - 362141bd3b11
+    - 522527cf0d3c
 
 #############################################################################
 #  Registration section used to register a new identity with fabric-ca server
