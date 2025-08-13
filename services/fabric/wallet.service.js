@@ -1,5 +1,6 @@
 const { Wallets, X509WalletMixin } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
+const { Utils } = require('fabric-common');
 const fs = require('fs');
 const path = require('path');
 const { error } = require('console');
@@ -26,6 +27,11 @@ class WalletService{
             console.error('Failed to initialize wallet service', error);
             throw error;
         }
+    }
+
+    createCryptoSuite() {
+        const cryptoSuite = Utils.newCryptoSuite();
+        return cryptoSuite;
     }
 
     async userExists(userId) {
@@ -135,18 +141,23 @@ class WalletService{
 
     async enrollAdmin({ userId = 'admin', secret, caUrl }) {
         await this.ensureInitialized();
-
+        
         try {
-            if (await this.userExists(userId)) {
-                console.log(`Admin ${userId} already enrolled`);
-                return { success: true, userId, message: 'Admin already enrolled' };
-            }
-
-            const ca = new FabricCAServices(caUrl, null, '', { 
-                httpOptions: { 
+            console.log(`Enrolling admin ${userId} with CA at ${caUrl}`);
+            
+            const ca = new FabricCAServices(
+                caUrl, 
+                { 
+                    trustedRoots: [],
                     verify: false
-                } 
-            }, 'ca-org1');
+                },
+                '', 
+                { 
+                    httpOptions: { 
+                        verify: false
+                    }
+                }
+            );
 
             const enrollment = await ca.enroll({
                 enrollmentID: userId,
@@ -167,16 +178,14 @@ class WalletService{
 
             return {
                 success: true,
-                userId,
-                certificate: enrollment.certificate,
-                privateKey: enrollment.key.toBytes()
+                message: `Successfully enrolled admin ${userId} and imported into wallet`
             };
         } catch (error) {
-            console.error(`Failed to enroll admin ${userId}:`, error);
+            console.error(`Failed to enroll admin ${userId}`, error);
             throw error;
         }
     }
-
+    
     async ensureInitialized() {
         if (!this.initialized) {
             await this.initialize();

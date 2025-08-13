@@ -4,7 +4,7 @@ debug: true
 crlsizelimit: 512000
 
 tls:
-  enabled: false
+  enabled: true
   certfile: /etc/hyperledger/fabric-ca-server/ca-cert.pem
   keyfile: /etc/hyperledger/fabric-ca-server/ca-key.pem
 

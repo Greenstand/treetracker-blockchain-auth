@@ -88,6 +88,6 @@ curl -X GET http://localhost:3000/api/fabric/identities \
 curl -X GET "http://localhost:3000/api/fabric/export-identity/new-user-id" \
  -H "Authorization: Bearer <access-token>"
 
-## 13. Fabric CA Server Status
+## 12. Fabric CA Server Status
 
 curl -X GET http://localhost:3000/api/fabric/health

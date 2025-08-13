@@ -3,7 +3,7 @@ const router = express.Router();
 const fabricController = require('../controllers/fabric.controller');
 const { extractToken, validateJwt } = require('../middleware/auth.middleware');
 
-router.get('/exists/:userId', fabricController.checkUserExists);
+router.get('/users/:userId/exists', fabricController.checkUserExists);
 router.post('/register', extractToken, validateJwt, fabricController.register);
 router.get('/identity/:userId', fabricController.getIdentity);
 
