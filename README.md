@@ -64,29 +64,6 @@ The Backend Bridge facilitates seamless integration between Keycloak and Hyperle
 - 📜 Enroll and issue Fabric certificates for authenticated users
 - 💼 Securely store blockchain identities in a Fabric Wallet
   
-## 🧭 System Overview
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant User
-    participant Frontend
-    participant Backend Bridge
-    participant Keycloak
-    participant Fabric Wallet
-    participant Fabric CA
-
-    User->>Frontend: Login via Keycloak
-    Frontend->>Keycloak: Redirect for authentication
-    Keycloak-->>Frontend: Returns JWT token
-    Frontend->>Backend Bridge: Sends JWT (Authorization: Bearer <token>)
-    Backend Bridge->>Keycloak: Verify JWT using JWKS
-    alt Identity not in Fabric Wallet
-        Backend Bridge->>Fabric CA: Register & Enroll user
-        Fabric CA-->>Backend Bridge: Returns signed cert
-        Backend Bridge->>Fabric Wallet: Store identity
-    end
-    Backend Bridge-->>Frontend: Success + Identity reference
 
 ## Prerequisites
 
@@ -448,3 +425,27 @@ For support and questions:
 ---
 
 **Note**: This is a secure system handling blockchain identities. Always follow security best practices and keep credentials secure.
+## 🧭 System Overview
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User
+    participant Frontend
+    participant Backend Bridge
+    participant Keycloak
+    participant Fabric Wallet
+    participant Fabric CA
+
+    User->>Frontend: Login via Keycloak
+    Frontend->>Keycloak: Redirect for authentication
+    Keycloak-->>Frontend: Returns JWT token
+    Frontend->>Backend Bridge: Sends JWT (Authorization: Bearer <token>)
+    Backend Bridge->>Keycloak: Verify JWT using JWKS
+    alt Identity not in Fabric Wallet
+        Backend Bridge->>Fabric CA: Register & Enroll user
+        Fabric CA-->>Backend Bridge: Returns signed cert
+        Backend Bridge->>Fabric Wallet: Store identity
+    end
+    Backend Bridge-->>Frontend: Success + Identity reference
+
