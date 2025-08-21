@@ -1,0 +1,56 @@
+{
+  "name": "backend-bridge",
+  "version": "1.0.0",
+  "description": "A secure linking layer that connects Keycloak Identity Provider with Hyperledger Fabric blockchain identity system",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
+  },
+  "keywords": [
+    "keycloak",
+    "hyperledger-fabric",
+    "identity-bridge",
+    "blockchain",
+    "jwt",
+    "fabric-ca"
+  ],
+  "author": "Backend Bridge Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "fabric-network": "^2.2.20",
+    "fabric-ca-client": "^2.2.20",
+    "fabric-common": "^2.2.20",
+    "winston": "^3.11.0",
+    "dotenv": "^16.3.1",
+    "joi": "^17.11.0",
+    "bcrypt": "^5.1.1",
+    "crypto": "^1.0.1",
+    "fs-extra": "^11.2.0",
+    "axios": "^1.6.2",
+    "express-validator": "^7.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.55.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

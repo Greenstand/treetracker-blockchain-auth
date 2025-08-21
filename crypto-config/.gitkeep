@@ -1,0 +1,17 @@
+# This directory should contain your Hyperledger Fabric network configuration files
+# Including:
+# - Connection profiles (connection-org1.json)
+# - TLS certificates
+# - MSP configuration files
+#
+# Example structure:
+# crypto-config/
+# ├── connection-org1.json
+# ├── peerOrganizations/
+# │   └── org1.example.com/
+# │       └── ca/
+# │           └── ca.org1.example.com-cert.pem
+# └── ordererOrganizations/
+#     └── example.com/
+#         └── tlsca/
+#             └── tlsca.example.com-cert.pem
