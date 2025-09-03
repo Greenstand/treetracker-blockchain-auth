@@ -1,4 +1,4 @@
-# Hyperledger Fabric Enterprise Blockchain Integration with Greenstand Treetracker Platform
+# Enterprise Blockchain (Hyperledger Fabric) Integration with Greenstand Treetracker Platform
 
 ## Introduction
 
