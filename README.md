@@ -542,10 +542,6 @@ The web app's API service (`lib/api.ts`) is already configured to work with this
 4. Write tests
 5. Submit a pull request
 
-## 📄 License
-
-MIT License - see LICENSE file for details
-
 ## 🆘 Support
 
 For issues and questions:
@@ -569,3 +565,13 @@ For issues and questions:
 **Built with 🌳 for sustainable reforestation**
 
 *TreeTracker Authentication Service - Securing the future of reforestation*
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+**Author:** [imos64](https://github.com/imos64)  
+**Maintainer:** [Imonikhe Aikoroje](https://www.linkedin.com/in/imosaikoroje/)
