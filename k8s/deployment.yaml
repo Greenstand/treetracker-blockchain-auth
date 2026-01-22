@@ -1,0 +1,189 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treetracker-auth-service
+  namespace: treetracker-webapp-mvp
+  labels:
+    app: treetracker-auth-service
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treetracker-auth-service
+  template:
+    metadata:
+      labels:
+        app: treetracker-auth-service
+        version: v1
+    spec:
+      imagePullSecrets:
+      - name: registry-treetracker-registry
+      containers:
+      - name: auth-service
+        image: registry.digitalocean.com/treetracker-registry/treetracker-auth-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "development"
+        - name: PORT
+          value: "3000"
+        - name: API_PREFIX
+          value: "/api/v1"
+        
+        # Keycloak Configuration
+        - name: KEYCLOAK_URL
+          value: "http://keycloak.treetracker.svc.cluster.local:8080"
+        - name: KEYCLOAK_REALM
+          value: "treetracker"
+        - name: KEYCLOAK_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: keycloak-client-id
+        - name: KEYCLOAK_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: keycloak-client-secret
+        - name: KEYCLOAK_ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: keycloak-admin-username
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: keycloak-admin-password
+        
+        # Fabric Configuration
+        - name: FABRIC_NETWORK_NAME
+          value: "treetracker-network"
+        - name: FABRIC_CHANNEL_NAME
+          value: "treetracker-channel"
+        - name: FABRIC_CHAINCODE_NAME
+          value: "treetracker"
+        - name: FABRIC_MSP_ID
+          value: "GreenstandMSP"
+        - name: FABRIC_PEER_ENDPOINT
+          value: "peer0.greenstand.treetracker.svc.cluster.local:7051"
+        - name: FABRIC_ORDERER_ENDPOINT
+          value: "orderer.treetracker.svc.cluster.local:7050"
+        - name: FABRIC_CA_URL
+          value: "https://ca.greenstand.treetracker.svc.cluster.local:7054"
+        - name: FABRIC_CA_NAME
+          value: "ca-greenstand"
+        - name: FABRIC_ADMIN_USER
+          value: "admin"
+        - name: FABRIC_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: fabric-admin-password
+        - name: FABRIC_TLS_ENABLED
+          value: "false"
+        
+        # JWT Configuration
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: jwt-secret
+        - name: JWT_EXPIRES_IN
+          value: "1h"
+        - name: JWT_REFRESH_EXPIRES_IN
+          value: "7d"
+        
+        # CORS Configuration
+        - name: CORS_ORIGIN
+          value: "http://localhost:3001,http://159.89.146.66:30000,http://165.227.31.112:30000,http://178.128.5.14:30000"
+        - name: CORS_CREDENTIALS
+          value: "true"
+        
+        # Rate Limiting
+        - name: RATE_LIMIT_WINDOW_MS
+          value: "900000"
+        - name: RATE_LIMIT_MAX_REQUESTS
+          value: "100"
+        
+        # Logging
+        - name: LOG_LEVEL
+          value: "info"
+        - name: LOG_FORMAT
+          value: "json"
+        
+        # Session
+        - name: SESSION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: session-secret
+
+        # Admin Registration
+        - name: ADMIN_REGISTRATION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secrets
+              key: admin-registration-secret
+        
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"
+        
+        livenessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        volumeMounts:
+        - name: wallet
+          mountPath: /app/wallet
+        - name: logs
+          mountPath: /app/logs
+      
+      volumes:
+      - name: wallet
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+      
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treetracker-auth-service
+  namespace: treetracker-webapp-mvp
+  labels:
+    app: treetracker-auth-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  selector:
+    app: treetracker-auth-service
